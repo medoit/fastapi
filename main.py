@@ -1,4 +1,6 @@
+from typing import List
 from fastapi import FastAPI
+from pydantic import BaseModel
 
 
 app = FastAPI(
@@ -29,3 +31,16 @@ def change_user(user_id: int, new_name: str):
     _user = list(filter(lambda user: user.get("id") == user_id, users))[0]
     _user["name"] = new_name
     return {"status": 200, "data": _user}
+
+list_passwords = []
+
+class Password(BaseModel):
+    id: int
+    user_id: int
+    login: str
+    password: str
+
+@app.post("/passwords")
+def add_password(passwords: List[Password]):
+    list_passwords.extend(passwords)
+    return {"status": 200, "data": list_passwords}
