@@ -42,6 +42,16 @@ class UserManager(IntegerIDMixin, BaseUserManager[User, int]):
         await self.on_after_register(created_user, request)
 
         return created_user
+    
+    async def on_after_request_verify(
+        self, user: User, token: str, request: Optional[Request] = None
+    ):
+        print(f"Verification requested for user {user.id}. Verification token: {token}")
+    
+    async def on_after_verify(
+        self, user: User, request: Optional[Request] = None
+    ):
+        print(f"User {user.id} has been verified")
 
 
 async def get_user_manager(user_db=Depends(get_user_db)):

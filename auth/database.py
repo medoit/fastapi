@@ -2,6 +2,7 @@ from typing import AsyncGenerator
 
 from fastapi import Depends
 from fastapi_users.db import SQLAlchemyUserDatabase, SQLAlchemyBaseUserTable
+from pydantic import EmailStr
 from sqlalchemy.ext.asyncio import AsyncSession, async_sessionmaker, create_async_engine
 from sqlalchemy.orm import DeclarativeBase, Mapped, mapped_column
 from sqlalchemy import Boolean, ForeignKey, String, TIMESTAMP, Integer
@@ -30,7 +31,7 @@ class User(SQLAlchemyBaseUserTable[int], Base):
     role_id: Mapped[int] = mapped_column(
         Integer, ForeignKey(role.c.id)
     )
-    email: Mapped[str] = mapped_column(
+    email: Mapped[EmailStr] = mapped_column(
         String, nullable=False
     )
     hashed_password: Mapped[str] = mapped_column(
